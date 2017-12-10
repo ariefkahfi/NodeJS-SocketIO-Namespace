@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <script src="http://localhost/libs/js/socket-io.js"></script>
+    <title>Document</title>
+</head>
+<body>
+            <div>
+                <input type="text" id="txtMessage" onkeyup="onEnterKey(event)"/>
+            </div>
+        
+            <div id="messageContainer">
+        
+            </div>        
+</body>
+    <script>
+        let socketIO = io("http://localhost:9600/room1");
+
+
+        console.log(socketIO);
+    
+        let onEnterKey = (event)=>{
+            if(event.keyCode === 13 && event.target.value !== ''){
+                socketIO.emit(
+                    "send_msg_to_room1",
+                    event.target.value);
+            }
+        }
+
+        socketIO.on("on_msg_from_room1",(data)=>{
+            let newDiv = document.createElement("div");
+
+            
+
+            newDiv.innerHTML = `${data.room}@${data.msg}`;
+            
+            newDiv.style.margin  = "5px";
+            newDiv.style.padding = "5px";
+            newDiv.style.backgroundColor = "dodgerblue";
+
+            document.getElementById("messageContainer").append(newDiv);
+        });
+        
+
+    </script>
+</html>
